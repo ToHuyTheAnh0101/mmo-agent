@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode (D-05: dark by default) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Dark theme base tokens matching Claude/ChatGPT aesthetic */
+@layer base {
+  html {
+    @apply bg-gray-950 text-gray-100;
+  }
+}
