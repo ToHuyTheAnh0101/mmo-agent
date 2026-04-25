@@ -1,133 +1,166 @@
-# MMO Agent Hub - System Design Specification
+# MMO Agent Hub - Comprehensive System Design Specification
 
 ## 1. Introduction
-The **MMO Agent Hub** is a specialized platform designed to automate and manage Facebook operations at scale. It leverages AI (LLMs) and advanced browser automation to provide a centralized dashboard for monitoring page health, post performance, and assisting staff via intelligent chat interfaces.
-
-## 2. Core Objectives
-- **Account Stability**: Use human-like automation to bypass bot detection.
-- **Data-Driven Insights**: Automated tracking of Page Quality and Insights metrics.
-- **AI-Powered Assistance**: Provide a "smart" intermediary between complex data and staff members using RAG (Retrieval-Augmented Generation).
-- **Scalable Notification Hub**: Real-time alerts via Telegram for critical events.
+The **MMO Agent Hub** is a specialized platform designed to automate and manage Facebook operations at scale. It leverages AI and advanced browser automation to monitor asset health, track performance milestones (100k views), and provide a context-aware AI assistant for staff via Telegram.
 
 ---
 
-## 3. System Architecture
-The system follows a **Modular Monolith** architecture with **Event-Driven asynchronous tasks**.
+## 2. Component 1: Facebook Automation & Insight Bot
+**Goal**: Automatically monitor Page Quality (strikes) and performance milestones (views/likes) without manual login.
 
-### 3.1 Components Diagram
+### 2.1 Requirement Clarification (Làm rõ yêu cầu)
+We need a system that can "act like a human" to access restricted areas of Facebook (like Page Quality) and "act like an API" to fetch data efficiently.
+
+### 2.2 The "Need" (Cái chúng ta cần)
+*   **Accounts**: FB UID, Password, and **2FA Secret Key**.
+*   **Infrastructure**: Dedicated **Proxy IPs** (Residential preferred) to avoid cluster bans.
+*   **Security Bypass**: A **Stealth Browser** environment (Puppeteer) to hide automation fingerprints.
+
+### 2.3 Step-by-Step Implementation (Từng bước thực hiện)
+1.  **Authentication**:
+    *   Launch browser with Proxy and Stealth plugin.
+    *   Inject credentials using human-like typing delays.
+    *   Generate 6-digit TOTP from Secret Key and submit.
+2.  **Token Extraction**:
+    *   Navigate to Ads Manager.
+    *   Scrape the high-privilege `EAAB` Access Token from source code.
+3.  **Verification**: Confirm login status and save session cookies for future use.
+
+#### Sequence Diagram: Login & Extraction
 ```mermaid
-graph TD
-    subgraph "Entry Points"
-        TeleHook[Telegram Webhook]
-        Dashboard[Web Dashboard API]
-    end
-
-    subgraph "Core Modules"
-        LogicGate[API Controller / Logic Gate]
-        AIService[AI Service with RAG]
-        AutoEngine[Puppeteer Automation Engine]
-        MonitorSvc[Background Monitoring Service]
-    end
-
-    subgraph "Storage & Memory"
-        MainDB[(SQLite/Postgres - Persistence)]
-        VectorDB[(Vector Store - Long-term Memory)]
-        TaskQueue[(BullMQ/Redis - Async Queue)]
-    end
-
-    TeleHook --> LogicGate
-    Dashboard --> LogicGate
-    LogicGate --> AIService
-    LogicGate --> TaskQueue
-    TaskQueue --> AutoEngine
-    TaskQueue --> MonitorSvc
-    AIService --> VectorDB
-    AutoEngine --> MainDB
-    MonitorSvc --> MainDB
+sequenceDiagram
+    participant Bot as Automation Engine
+    participant DB as Database
+    participant FB as Facebook
+    
+    Bot->>DB: Get Account & 2FA Secret
+    Bot->>FB: Login with Credentials
+    FB-->>Bot: Ask for 2FA
+    Bot->>Bot: Generate TOTP Code
+    Bot->>FB: Submit 2FA
+    FB-->>Bot: Home Feed Access
+    Bot->>FB: Access Ads Manager
+    Bot->>Bot: Extract EAAB Token
+    Bot->>DB: Save Token & Cookies
 ```
 
 ---
 
-## 4. Detailed Component Design
+## 3. Component 2: Monitoring & Notification Service
+**Goal**: Detect "Gậy" (violations) and viral milestones (100k views) and alert via Telegram.
 
-### 4.1 Facebook Automation Engine (Puppeteer Service)
-This module acts as the "Hands" of the system, simulating real user behavior to interact with Facebook's security layers.
+### 3.1 Requirement Clarification
+The system must proactively check for health issues that are not reported via standard APIs and track performance targets.
 
-#### 4.1.1 Facebook Login Workflow
-1. **Environment Setup**: Launch a stealth-mode browser with a dedicated Proxy and custom User-Agent.
-2. **Initial Navigation**: Access `facebook.com` and handle cookie/consent banners based on the region.
-3. **Identity Injection**: Locate fields and use `humanType` (100ms-250ms delay) to mimic human typing speed.
-4. **2FA Bypass**: Generate a 6-digit TOTP from `secret_2fa` and use a 3-retry loop for code submission.
-5. **Post-Login Verification**: Handle "Trust Device" popups and verify the landing page (Home feed).
-6. **Token Extraction**: Navigate to Ads Manager and scrape the high-privilege `EAA...` access token using optimized Regex.
+### 3.2 The "Need"
+*   **Checkers**: Background workers that run periodically.
+*   **Evidence**: Capability to capture screenshots of violations.
+*   **Alerting**: Telegram Bot API integration.
 
-#### 4.1.2 Error & Security Handling
-1. **Checkpoint Detection**: Capture timestamped screenshots (`error_checkpoint_*.png`) if account restrictions appear.
-2. **Session Persistence**: Save and reload Browser Cookies to minimize full login attempts and reduce account lock risks.
+### 3.3 Step-by-Step Implementation
+1.  **Health Check (Scraping)**:
+    *   Use saved cookies to visit `facebook.com/[page_id]/quality`.
+    *   Search for keywords like "Violation" or "Restricted".
+    *   If found, capture a screenshot and send to Telegram.
+2.  **Performance Check (API)**:
+    *   Use the `EAAB` token to call Graph API `/{post_id}/video_views`.
+    *   Compare current value with thresholds (e.g., 100,000 views).
+    *   If reached, send a congratulatory alert.
 
-### 4.2 AI & RAG Engine (The "Brain")
-This module provides reasoning and specialized knowledge retrieval for staff assistance.
-
-#### 4.2.1 ChatGPT API Integration
-1. **Authentication**: Secure connection via OpenAI API using environment-stored keys.
-2. **Persona Configuration**: Inject a System Prompt defining the AI as an "MMO Operations Expert".
-3. **Session Management**: Track conversations via `staff_id` and `session_id` to maintain context.
-
-#### 4.2.2 RAG Strategy (Long-term Memory)
-1. **Knowledge Indexing**: Periodically scan SOP files and chat history.
-2. **Chunking & Embedding**: Split data into 500-token pieces and vectorize using `text-embedding-3-small`.
-3. **Contextual Retrieval**: Perform vector search to find relevant snippets and inject them as context for the LLM.
-
-### 4.3 Monitoring & Insight Service
-This background service proactively tracks the health and performance of all managed assets.
-
-#### 4.3.1 Automated Page Quality Scraper (Checking for Flags/Gậy)
-Since Facebook doesn't provide a full "Page Quality" status via Graph API, the system uses Puppeteer for deep inspection:
-1. **Navigation**: Uses stored session cookies to access `facebook.com/[page_id]/quality` or the "Support Inbox".
-2. **Detection**:
-   - Scans for specific keywords: "Your page has been restricted", "Violation", "Gậy bản quyền", "Vi phạm tiêu chuẩn cộng đồng".
-   - Identifies the color indicator (Green = Healthy, Yellow = Warning, Red = Restricted).
-3. **Evidence Capture**: If a violation is found, a full-page screenshot is taken and saved with the Page ID for staff review.
-
-#### 4.3.2 Metric Tracking & Milestone Detection (100k Views/Likes)
-Uses the extracted Access Token to fetch real-time performance data:
-1. **Data Fetching**: Periodically calls Graph API nodes:
-   - `/{page_id}/insights/page_impressions`
-   - `/{page_id}/insights/page_post_engagements`
-   - `/{post_id}/video_views`
-2. **Threshold Logic**: The system compares current values against user-defined targets (e.g., Target = 100,000 views).
-3. **State Management**: Prevents duplicate alerts by marking a milestone as "Achieved" in the `monitoring_logs` table once detected.
-
-#### 4.3.3 Notification Dispatcher (Telegram Alert Hub)
-1. **Aggregation**: Gathers results from both the Scraper and the Insight Fetcher.
-2. **Alert Formatting**: Constructs a human-readable message in Vietnamese/English:
-   - *Example 1 (Violation)*: `[ALERT] Page [Name] just got a restriction! Action: Check Support Inbox immediately.`
-   - *Example 2 (Milestone)*: `[CONGRATS] Post [ID] has reached 100,000 views! Total Reach: 150k.`
-3. **Dispatch**: Sends the message to the staff's Telegram Chat ID via the Bot API.
+#### Activity Diagram: Monitoring Logic
+```mermaid
+graph TD
+    Start((Start Polling)) --> TaskType{Task?}
+    TaskType -- "Check Gậy" --> Scrape[Scrape Page Quality Page]
+    Scrape --> Violation{Violation Found?}
+    Violation -- Yes --> Screen[Capture Screenshot]
+    Screen --> Tele1[Send Alert to Telegram]
+    
+    TaskType -- "Check View" --> API[Call Graph API]
+    API --> Metric{Views >= 100k?}
+    Metric -- Yes --> CheckNotified{Already Notified?}
+    CheckNotified -- No --> Tele2[Send Milestone Alert]
+    CheckNotified -- Yes --> End((End))
+```
 
 ---
 
-## 5. Database Design (ERD)
+## 4. Component 3: Telegram AI Intermediary
+**Goal**: A bridge between staff and ChatGPT that "remembers" conversation history.
 
-### 5.1 Main Entities
-- **Accounts**: Stores FB credentials, 2FA secrets, and current token status.
-- **Pages**: Links FB accounts to specific pages being monitored.
-- **Users (Staff)**: Manages permissions for who can access which pages via Telegram.
-- **ChatHistory**: Stores conversation logs for RAG indexing.
+### 4.1 Requirement Clarification
+Employees need to ask questions about the data or operations without re-training the AI every time. The AI must be "smart" and context-aware.
+
+### 4.2 The "Need"
+*   **Chat Interface**: Telegram Bot API.
+*   **Memory**: A database to store `ConversationHistory` mapped to `tele_user_id`.
+*   **AI Brain**: OpenAI GPT-4 with a specialized system prompt.
+
+### 4.3 Step-by-Step Implementation
+1.  **Message Ingestion**: Receive staff message via Telegram Webhook.
+2.  **Context Retrieval**: Lục lại 5-10 câu chat gần nhất của nhân viên đó từ Database.
+3.  **Prompt Construction**: Combine history + new question + system instructions.
+4.  **AI Response**: Send back to Telegram and save the new exchange to history.
+
+#### Data Flow: AI Context Logic
+```mermaid
+graph LR
+    Staff((Staff)) -- "Question" --> Bot[Telegram Bot]
+    Bot -- "User ID" --> DB[(History DB)]
+    DB -- "Last 10 msgs" --> Brain[AI Engine]
+    Bot -- "Current msg" --> Brain
+    Brain -- "Answer" --> Bot
+    Bot -- "Response" --> Staff
+    Bot -- "Save" --> DB
+```
 
 ---
 
-## 6. Security Considerations
-- **Credential Encryption**: FB passwords and 2FA secrets are encrypted at rest using AES-256.
-- **Proxy per Account**: Capability to assign unique proxy IPs per FB account to prevent cluster bans.
-- **Credential Masking**: Logs must never reveal full passwords or secrets.
+## 5. System Architecture & Data Design
+
+### 5.1 High-Level Architecture
+```mermaid
+graph TD
+    Tele[Telegram] <--> Logic[Main Logic Gate]
+    Logic <--> AI[AI Service]
+    Logic --> Queue[Task Queue]
+    Queue --> Auto[Automation Engine]
+    Auto --> FB[Facebook]
+    Logic <--> DB[(PostgreSQL)]
+```
+
+### 5.2 Database ERD (Entity Relationship)
+```mermaid
+erDiagram
+    ACCOUNT ||--o{ PAGE : manages
+    ACCOUNT {
+        string uid PK
+        string password_enc
+        string two_fa_secret
+        string access_token
+    }
+    PAGE ||--o{ LOG : generates
+    PAGE {
+        string page_id PK
+        string status
+    }
+    STAFF ||--o{ CONVERSATION : chats
+    CONVERSATION {
+        string tele_user_id PK
+        string message
+        datetime created_at
+    }
+```
 
 ---
+
+## 6. Security & Scalability
+*   **Encryption**: All FB credentials and 2FA keys are encrypted with AES-256.
+*   **Proxy Isolation**: 1 Proxy per FB account to prevent detection.
+*   **Self-Healing**: Automated re-login if Token expires.
 
 ## 7. Implementation Roadmap
-1. **Phase 1 (Completed)**: Core Automation & Token Extraction.
-2. **Phase 2**: Database Schema & Persistence Layer.
-3. **Phase 3**: Telegram Bot & AI Chat Integration.
-4. **Phase 4**: RAG Implementation & Knowledge Indexing.
-5. **Phase 5**: Monitoring Service & Alert Logic.
-6. **Phase 6**: Web Dashboard for Analytics.
+1.  **Phase 1**: Login & Token (Done).
+2.  **Phase 2**: Database persistence for accounts & logs.
+3.  **Phase 3**: Telegram AI Integration with Context memory.
+4.  **Phase 4**: Page Quality Scraper & Alerting.
