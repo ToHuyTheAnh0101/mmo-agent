@@ -1,10 +1,11 @@
 ---
 phase: 1
 slug: foundation
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-04-25
+reviewed_at: 2026-04-25
 ---
 
 # Phase 1 — UI Design Contract
@@ -70,13 +71,13 @@ Exceptions: none
 | Role | Size | Weight | Line Height | Tailwind classes |
 |------|------|--------|-------------|-----------------|
 | Body | 14px | 400 (regular) | 1.5 | `text-sm font-normal leading-normal` |
-| Label | 12px | 500 (medium) | 1.25 | `text-xs font-medium leading-tight` |
+| Label | 12px | 600 (semibold) | 1.25 | `text-xs font-semibold leading-tight` |
 | Heading | 16px | 600 (semibold) | 1.25 | `text-base font-semibold leading-tight` |
 | Display | 20px | 600 (semibold) | 1.2 | `text-xl font-semibold` |
 
 **Font family:** `font-sans` (maps to system-ui, -apple-system, Segoe UI, Roboto — no web font loaded)
 
-**Weights used:** regular (400) and semibold (600). Medium (500) used only for Label role (tight list items).
+**Weights used:** regular (400) and semibold (600).
 
 ---
 
