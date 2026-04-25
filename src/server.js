@@ -1,5 +1,7 @@
 require('dotenv').config();
+require('./db'); // Initialize SQLite DB and create tables on first run
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const routes = require('./routes');
 
@@ -16,6 +18,16 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api', routes);
+
+// Production: serve React build from client/dist
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+
+  // SPA catch-all: Express 5 wildcard syntax (app.get('*') throws in Express 5)
+  app.get('/{*splat}', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+  });
+}
 
 app.listen(port, () => {
   console.log(`Agent backend listening on http://localhost:${port}`);

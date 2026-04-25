@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "description": "Facebook Information Scraper Agent Backend",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "NODE_ENV=production node src/server.js",
+    "dev": "concurrently --kill-others-on-fail --names \"API,WEB\" -c \"cyan,magenta\" \"nodemon src/server.js\" \"npm run client:dev\"",
+    "client:dev": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "build": "npm run client:build",
     "lint": "eslint \"src/**/*.js\"",
     "lint:fix": "eslint \"src/**/*.js\" --fix",
     "format": "prettier --write \"src/**/*.js\""
@@ -13,6 +16,7 @@
   "dependencies": {
     "axios": "^1.15.2",
     "better-sqlite3": "^12.9.0",
+    "concurrently": "^9.2.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
