@@ -14,7 +14,9 @@
     "axios": "^1.15.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "otplib": "^13.4.0",
+    "puppeteer": "^24.42.0"
   },
   "devDependencies": {
     "eslint": "^10.2.1",

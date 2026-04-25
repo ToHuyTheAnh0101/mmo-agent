@@ -50,12 +50,17 @@ AI_BASE_URL=https://proxy.simpleverse.io.vn/api/v1
 AI_MODEL=gpt-5.3-codex
 AI_API_KEY=your_api_key_here
 
-# Facebook Config
-FB_GRAPH_URL=https://graph.facebook.com/v21.0
-FB_APP_ID=
-FB_APP_SECRET=
-FB_USER_ACCESS_TOKEN=
+# Facebook Account for Automation (Tùy chọn)
+FB_UID=your_uid
+FB_PASS=your_password
+FB_2FA=your_2fa_secret
 ```
+
+### 4. Luồng Automation (Tự động lấy Token)
+Hệ thống hỗ trợ tự động đăng nhập vào Facebook để lấy `Access Token` thông qua Puppeteer. Để sử dụng:
+1. Đảm bảo đã điền đầy đủ `FB_UID`, `FB_PASS`, và `FB_2FA` trong file `.env`.
+2. Gọi API `/api/facebook/login` (POST).
+3. Hệ thống sẽ trả về Token và lưu tạm vào bộ nhớ để sử dụng cho các yêu cầu tiếp theo.
 
 ### 4. Chạy ứng dụng
 - **Chế độ phát triển (Development):**
@@ -76,6 +81,7 @@ FB_USER_ACCESS_TOKEN=
 | `GET` | `/health` | Kiểm tra trạng thái hệ thống |
 | `POST` | `/api/ai/chat` | Gửi câu hỏi và nhận phản hồi từ AI |
 | `GET` | `/api/facebook/page/:id` | Lấy thông tin chi tiết của một Facebook Page |
+| `POST` | `/api/facebook/login` | Tự động đăng nhập và lấy Access Token |
 
 ---
 

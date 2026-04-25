@@ -1,4 +1,5 @@
 const fbService = require('../services/facebookService');
+const fbAutomationService = require('../services/fbAutomationService');
 
 async function getPageInfo(req, res) {
   try {
@@ -52,8 +53,45 @@ async function getPageFeed(req, res) {
   }
 }
 
+async function autoLogin(req, res) {
+  try {
+    const { uid, pass, secret } = req.body;
+    
+    // Sử dụng thông tin từ request body hoặc từ ENV
+    const targetUid = uid || process.env.FB_EMAIL || process.env.FB_UID;
+    const targetPass = pass || process.env.FB_PASS;
+    const targetSecret = secret || process.env.FB_2FA;
+
+    if (!targetUid || !targetPass || !targetSecret) {
+      const missing = [];
+      if (!targetUid) missing.push('Email/UID');
+      if (!targetPass) missing.push('Password');
+      if (!targetSecret) missing.push('2FA Secret');
+      
+      return res.status(400).json({ 
+        success: false, 
+        error: `Thiếu thông tin: ${missing.join(', ')}` 
+      });
+    }
+
+    const token = await fbAutomationService.loginAndGetToken(targetUid, targetPass, targetSecret);
+    
+    // Lưu token vào process.env để dùng cho các request sau (tạm thời trong runtime)
+    process.env.FB_USER_ACCESS_TOKEN = token;
+
+    res.json({ 
+      success: true, 
+      message: 'Đăng nhập và lấy token thành công',
+      token: token 
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
 module.exports = {
   getPageInfo,
   getPageInsights,
   getPageFeed,
+  autoLogin,
 };
