@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import asyncio
 from logging.config import fileConfig
 
@@ -5,6 +9,7 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
+from alembic.script import ScriptDirectory
 
 # Import models so Alembic can detect them
 from app.database import Base
@@ -18,6 +23,24 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
+def process_revision_directives(context, revision, directives):
+    # Skip if no directives (e.g. empty autogenerate)
+    if not directives:
+        return
+        
+    # Get sequential ID
+    script_directory = ScriptDirectory.from_config(context.config)
+    revisions = list(script_directory.walk_revisions())
+    
+    max_rev = 0
+    for rev in revisions:
+        if rev.revision and rev.revision.isdigit():
+            max_rev = max(max_rev, int(rev.revision))
+            
+    # Set the revision ID to max + 1
+    directives[0].rev_id = f"{max_rev + 1:03d}"
+
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
@@ -26,6 +49,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        process_revision_directives=process_revision_directives,
     )
 
     with context.begin_transaction():
@@ -33,7 +57,11 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection):
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection, 
+        target_metadata=target_metadata,
+        process_revision_directives=process_revision_directives,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

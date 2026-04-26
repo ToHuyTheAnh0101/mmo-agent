@@ -5,7 +5,7 @@ from functools import lru_cache
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables."""
 
-    DATABASE_URL: str = "sqlite+aiosqlite:///./data/chat.db"
+    DATABASE_URL: str = "postgresql+asyncpg://mmochat_user:admin@localhost:5432/mmo_chat"
     SECRET_KEY: str = "change-me-in-production"
     ENCRYPTION_KEY: str = "change-me-in-production"
 
