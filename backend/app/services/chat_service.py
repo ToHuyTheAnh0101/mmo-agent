@@ -60,7 +60,8 @@ async def send_message(
     # Save user message
     user_msg = Message(session_id=session_id, role="user", content=content)
     db.add(user_msg)
-    await db.flush()
+    await db.commit()
+    await db.refresh(user_msg)
 
     # Load session history
     result = await db.execute(
@@ -77,23 +78,45 @@ async def send_message(
     )
     api_config = result.scalar_one_or_none()
 
-    if api_config:
-        api_key = decrypt_api_key(api_config.api_key_encrypted)
-        base_url = api_config.base_url
-        model = api_config.model_name
-    elif settings.AI_API_KEY:
-        api_key = settings.AI_API_KEY
-        base_url = settings.AI_BASE_URL
-        model = settings.AI_MODEL
-    else:
-        raise Exception("No API key configured. Please set up your API key in Settings.")
-
     # Stream response
     full_response = ""
-    
-    async for token in stream_chat_completion(base_url, api_key, model, messages_for_llm):
-        full_response += token
-        yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+
+    if settings.NO_API:
+        import asyncio
+        import re
+        
+        mock_text = "### Mocked Response 🛠️\n\n"
+        mock_text += "Here is the conversation history I received:\n\n"
+        
+        for m in messages_for_llm:
+            content = m['content']
+            # Omit previous mocked responses to prevent exponential text explosion
+            if m['role'] == 'assistant' and content.startswith("### Mocked Response"):
+                content = "*[Previous mocked response omitted]*"
+            
+            mock_text += f"- **{m['role'].capitalize()}**: {content}\n"
+            
+        # Simulate streaming while perfectly preserving newlines and spaces
+        tokens = re.findall(r'\S+|\s+', mock_text)
+        for token in tokens:
+            full_response += token
+            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
+            await asyncio.sleep(0.02)
+    else:
+        if api_config:
+            api_key = decrypt_api_key(api_config.api_key_encrypted)
+            base_url = api_config.base_url
+            model = api_config.model_name
+        elif settings.AI_API_KEY:
+            api_key = settings.AI_API_KEY
+            base_url = settings.AI_BASE_URL
+            model = settings.AI_MODEL
+        else:
+            raise Exception("No API key configured. Please set up your API key in Settings.")
+            
+        async for token in stream_chat_completion(base_url, api_key, model, messages_for_llm):
+            full_response += token
+            yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
 
     # Save assistant message
     assistant_msg = Message(session_id=session_id, role="assistant", content=full_response)
@@ -101,7 +124,7 @@ async def send_message(
 
     # Update session timestamp
     session.updated_at = datetime.now(timezone.utc)
-    await db.flush()
+    await db.commit()
     await db.refresh(assistant_msg)
 
     yield f"data: {json.dumps({'type': 'done', 'message_id': assistant_msg.id})}\n\n"

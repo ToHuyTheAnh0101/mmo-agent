@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     AI_BASE_URL: str = "https://proxy.simpleverse.io.vn/api/v1"
     AI_MODEL: str = "gpt-5.3-codex"
     AI_API_KEY: str = ""
+    
+    # Test mode: set NO_API=true in .env to mock LLM responses
+    NO_API: bool = False
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 
