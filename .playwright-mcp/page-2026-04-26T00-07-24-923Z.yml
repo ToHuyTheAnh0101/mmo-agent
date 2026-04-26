@@ -1,0 +1,22 @@
+- generic [ref=e19]:
+  - generic [ref=e20]:
+    - heading "LLM Chat" [level=1] [ref=e21]
+    - paragraph [ref=e22]: Create your account
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]: Email
+      - textbox "Email" [ref=e26]:
+        - /placeholder: you@example.com
+    - generic [ref=e27]:
+      - generic [ref=e28]: Password
+      - textbox "Password" [ref=e29]:
+        - /placeholder: ••••••••
+    - generic [ref=e30]:
+      - generic [ref=e31]: Confirm Password
+      - textbox "Confirm Password" [ref=e32]:
+        - /placeholder: ••••••••
+    - button "Create Account" [ref=e33]
+    - paragraph [ref=e34]:
+      - text: Already have an account?
+      - link "Sign In" [ref=e35] [cursor=pointer]:
+        - /url: /login

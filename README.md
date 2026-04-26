@@ -1,103 +1,137 @@
-# 🤖 MMO Agent (Facebook Insight Agent)
+# LLM Chat Application
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
-[![Express Version](https://img.shields.io/badge/express-v5.x-blue)](https://expressjs.com/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+A full-stack LLM chat application featuring secure user authentication, session management, real-time message streaming, and per-user API key management. Built with FastAPI (Python) and React (Vite).
 
-**MMO Agent** là một hệ thống backend mạnh mẽ được thiết kế để tự động hóa việc thu thập thông tin từ Facebook và tích hợp trí tuệ nhân tạo (AI) để phân tích dữ liệu. Hệ thống giúp tối ưu hóa các chiến dịch MMO (Make Money Online) thông qua việc thấu hiểu dữ liệu và tương tác thông minh.
+## Prerequisites (Linux)
 
----
-
-## ✨ Tính năng chính
-
-- 🔍 **Facebook Insights**: Thu thập thông tin chi tiết từ các trang Facebook thông qua Graph API.
-- 💬 **AI Chat Integration**: Tích hợp các mô hình ngôn ngữ lớn (LLM) để phân tích dữ liệu hoặc phản hồi tự động.
-- 🚀 **RESTful API**: Cấu trúc API rõ ràng, dễ dàng tích hợp với các ứng dụng frontend hoặc bot.
-- 🛡️ **Environment Security**: Quản lý cấu hình bảo mật chặt chẽ qua biến môi trường.
+- **Python**: 3.11+
+- **Node.js**: 18+
+- **PostgreSQL**: 15+
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+## Local Environment Setup Guide (Linux)
 
-- **Runtime**: Node.js
-- **Framework**: Express.js (v5)
-- **HTTP Client**: Axios
-- **Quản lý biến môi trường**: Dotenv
-- **Code Quality**: ESLint & Prettier
+### 1. Database Setup (PostgreSQL)
 
----
+You need to create a PostgreSQL database and configure the connection credentials. 
 
-## 🚀 Cài đặt và Sử dụng
-
-### 1. Clone repository
+Install PostgreSQL (if you haven't already on Ubuntu/Debian):
 ```bash
-git clone https://github.com/ToHuyTheAnh0101/mmo-agent.git
-cd mmo-agent
+sudo apt update
+sudo apt install postgresql postgresql-contrib
 ```
 
-### 2. Cài đặt dependencies
+Create a new database and user (or use the default `postgres` user). Here is how to set the password for the `postgres` user and create the database `mmo_chat`:
+
 ```bash
-npm install
+# Create a new user called 'mmochat_user' with password 'admin'
+sudo -u postgres psql -c "CREATE USER mmochat_user WITH PASSWORD 'admin';"
+
+# Create the database and assign ownership to the new user
+sudo -u postgres createdb -O mmochat_user mmo_chat
 ```
 
-### 3. Cấu hình biến môi trường
-Tạo file `.env` tại thư mục gốc và cấu hình các thông số sau:
+### 2. Backend Setup
+
+The backend is built with FastAPI and uses SQLAlchemy with asyncpg.
+
+```bash
+# Navigate to the backend directory
+cd backend
+
+# Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables
+cp .env.example .env
+```
+
+**Configure `.env`:**
+Edit the `.env` file you just created and update the `DATABASE_URL` with the password you set in step 1. Also, set secure random strings for `SECRET_KEY` and `ENCRYPTION_KEY`.
+
 ```env
-PORT=3000
-
-# AI Config
-AI_BASE_URL=https://proxy.simpleverse.io.vn/api/v1
-AI_MODEL=gpt-5.3-codex
-AI_API_KEY=your_api_key_here
-
-# Facebook Account for Automation (Tùy chọn)
-FB_UID=your_uid
-FB_PASS=your_password
-FB_2FA=your_2fa_secret
+DATABASE_URL=postgresql+asyncpg://mmochat_user:admin@localhost:5432/mmo_chat
+SECRET_KEY=your_random_secret_key
+ENCRYPTION_KEY=your_fernet_encryption_key
 ```
 
-### 4. Luồng Automation (Tự động lấy Token)
-Hệ thống hỗ trợ tự động đăng nhập vào Facebook để lấy `Access Token` thông qua Puppeteer. Để sử dụng:
-1. Đảm bảo đã điền đầy đủ `FB_UID`, `FB_PASS`, và `FB_2FA` trong file `.env`.
-2. Gọi API `/api/facebook/login` (POST).
-3. Hệ thống sẽ trả về Token và lưu tạm vào bộ nhớ để sử dụng cho các yêu cầu tiếp theo.
-
-### 4. Chạy ứng dụng
-- **Chế độ phát triển (Development):**
+**How to generate secure keys:**
+- For `SECRET_KEY`, run:
   ```bash
-  npm run dev
+  openssl rand -hex 32
   ```
-- **Chế độ sản phẩm (Production):**
+- For `ENCRYPTION_KEY`, run:
   ```bash
-  npm start
+  python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
   ```
 
+**Run Database Migrations:**
+Initialize your database schema:
+```bash
+alembic revision --autogenerate -m "initial_schema"
+alembic upgrade head
+```
+
+**Start the Backend Server:**
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+The API will be available at `http://localhost:8000`, and the interactive API documentation at `http://localhost:8000/docs`.
+
+### 3. Frontend Setup
+
+The frontend is a React application powered by Vite.
+
+Open a new terminal window:
+```bash
+# Navigate to the frontend directory
+cd backend/../frontend # or just cd ../frontend from the backend dir
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+The frontend will be available at `http://localhost:5173`.
+
 ---
 
-## 📋 API Endpoints
+## Key Workflows
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/health` | Kiểm tra trạng thái hệ thống |
-| `POST` | `/api/ai/chat` | Gửi câu hỏi và nhận phản hồi từ AI |
-| `GET` | `/api/facebook/page/:id` | Lấy thông tin chi tiết của một Facebook Page |
-| `POST` | `/api/facebook/login` | Tự động đăng nhập và lấy Access Token |
+### Register & Chat
+1. Open http://localhost:5173
+2. Click **Register** and create an account (using an email and password).
+3. Click **New Chat** in the sidebar.
+4. Go to **Settings** (gear icon) and enter your LLM API key, base URL, and model.
+5. Type a message and press Send to start streaming responses!
 
----
-
-## 🤝 Đóng góp
-
-1. Fork dự án
-2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
-3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`)
-4. Push lên branch (`git push origin feature/AmazingFeature`)
-5. Mở Pull Request
+### Switch API Provider
+1. Go to **Settings**.
+2. Change your API key, base URL, or model.
+3. Click **Save**. All your existing sessions and messages are preserved.
+4. Continue chatting with the new provider seamlessly.
 
 ---
 
-## 📝 License
+## Testing
 
-Distributed under the MIT License. See `LICENSE` for more information.
+To run the test suites for both backend and frontend:
 
----
-*Phát triển bởi [ToHuyTheAnh0101](https://github.com/ToHuyTheAnh0101)*
+**Backend:**
+```bash
+cd backend
+source venv/bin/activate
+pytest
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm test
+```

@@ -1,0 +1,23 @@
+- generic [ref=e36]:
+  - generic [ref=e37]:
+    - generic [ref=e38]:
+      - generic [ref=e39]: LLM Chat
+      - button [ref=e40]:
+        - img [ref=e41]
+    - generic [ref=e43]:
+      - button "New Chat" [ref=e45]:
+        - img [ref=e46]
+        - text: New Chat
+      - paragraph [ref=e49]: No conversations yet
+    - generic [ref=e51]:
+      - generic [ref=e52]: T
+      - generic [ref=e53]: test@example.com
+      - button "Logout" [ref=e54]:
+        - img [ref=e55]
+  - generic [ref=e57]:
+    - button "Settings" [ref=e59]:
+      - img [ref=e60]
+    - generic [ref=e64]:
+      - img [ref=e65]
+      - paragraph [ref=e67]: Start a new conversation
+      - paragraph [ref=e68]: Click "New Chat" to begin

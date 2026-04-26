@@ -1,0 +1,29 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: LLM Chat
+      - button [ref=e7]:
+        - img [ref=e8]
+    - generic [ref=e10]:
+      - button "New Chat" [ref=e12]:
+        - img [ref=e13]
+        - text: New Chat
+      - generic [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e19]: New Chat
+    - generic [ref=e21]:
+      - generic [ref=e22]: T
+      - generic [ref=e23]: test@example.com
+      - button "Logout" [ref=e24]:
+        - img [ref=e25]
+  - generic [ref=e27]:
+    - button "Settings" [ref=e29]:
+      - img [ref=e30]
+    - generic [ref=e34]:
+      - img [ref=e35]
+      - paragraph [ref=e37]: How can I help you today?
+      - paragraph [ref=e38]: Type a message below to start chatting
+    - generic [ref=e40]:
+      - textbox "Send a message..." [active] [ref=e42]
+      - button [disabled] [ref=e43]:
+        - img [ref=e44]

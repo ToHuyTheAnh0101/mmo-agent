@@ -1,0 +1,32 @@
+# Web framework
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+
+# Validation
+email-validator==2.3.0
+
+# Database
+sqlalchemy[asyncio]==2.0.41
+asyncpg==0.30.0
+aiosqlite==0.22.1
+alembic==1.15.2
+
+# Authentication
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.4.0
+bcrypt==4.3.0
+
+# Encryption
+cryptography==44.0.3
+
+# HTTP client (for LLM API calls)
+httpx==0.28.1
+
+# Configuration
+python-dotenv==1.1.0
+pydantic-settings==2.9.1
+
+# Development
+pytest==8.3.5
+pytest-asyncio==0.25.3
+httpx  # also used for testing with TestClient
