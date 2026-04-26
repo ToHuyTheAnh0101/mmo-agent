@@ -26,3 +26,20 @@ logs/
 .DS_Store
 Thumbs.db
 .claude
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+*.egg
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Database
+data/
+*.db.playwright-mcp/

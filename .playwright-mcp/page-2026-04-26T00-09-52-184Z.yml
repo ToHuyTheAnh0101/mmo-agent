@@ -1,0 +1,47 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: LLM Chat
+      - button [ref=e7]:
+        - img [ref=e8]
+    - generic [ref=e10]:
+      - button "New Chat" [ref=e12]:
+        - img [ref=e13]
+        - text: New Chat
+      - generic [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e19]: New Chat
+    - generic [ref=e21]:
+      - generic [ref=e22]: T
+      - generic [ref=e23]: test@example.com
+      - button "Logout" [ref=e24]:
+        - img [ref=e25]
+  - generic [ref=e27]:
+    - button "Settings" [active] [ref=e29]:
+      - img [ref=e30]
+    - generic [ref=e34]:
+      - img [ref=e35]
+      - paragraph [ref=e37]: How can I help you today?
+      - paragraph [ref=e38]: Type a message below to start chatting
+    - generic [ref=e40]:
+      - textbox "Send a message..." [ref=e42]
+      - button [disabled] [ref=e43]:
+        - img [ref=e44]
+  - generic [ref=e47]:
+    - generic [ref=e48]:
+      - heading "API Settings" [level=2] [ref=e49]
+      - button [ref=e50]:
+        - img [ref=e51]
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: API Key
+        - textbox "Enter your API key" [ref=e56]
+      - generic [ref=e57]:
+        - generic [ref=e58]: Base URL
+        - textbox "https://api.openai.com/v1" [ref=e59]
+      - generic [ref=e60]:
+        - generic [ref=e61]: Model Name
+        - textbox "gpt-4" [ref=e62]
+      - generic [ref=e63]:
+        - button "Cancel" [ref=e64]
+        - button "Save" [ref=e65]

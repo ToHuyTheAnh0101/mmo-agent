@@ -24,12 +24,12 @@
 
 **Purpose**: Initialize both backend (Python/FastAPI) and frontend (React/Vite) projects
 
-- [ ] T001 Create project directory structure: `backend/`, `backend/app/`, `backend/app/models/`, `backend/app/schemas/`, `backend/app/routers/`, `backend/app/services/`, `backend/app/utils/`, `backend/alembic/`, `backend/tests/`, `frontend/`
-- [ ] T002 Initialize Python backend with FastAPI dependencies in `backend/requirements.txt` — include fastapi, uvicorn[standard], sqlalchemy[asyncio], asyncpg, alembic, passlib[bcrypt], python-jose[cryptography], cryptography, httpx, python-dotenv, pydantic-settings
-- [ ] T003 [P] Create backend environment config template in `backend/.env.example` with DATABASE_URL, SECRET_KEY, ENCRYPTION_KEY, AI_BASE_URL, AI_MODEL, AI_API_KEY
-- [ ] T004 [P] Scaffold React frontend using Vite in `frontend/` — run `npm create vite@latest frontend -- --template react`, install dependencies, install tailwindcss and @tailwindcss/vite
-- [ ] T005 [P] Configure Vite proxy and Tailwind CSS v4 in `frontend/vite.config.js` — proxy `/api` to `http://localhost:8000`, add react() and tailwindcss() plugins
-- [ ] T006 [P] Set up Tailwind CSS dark theme in `frontend/src/index.css` and `frontend/index.html` — use `@import "tailwindcss"`, `@custom-variant dark`, add `class="dark"` to html element
+- [x] T001 Create project directory structure: `backend/`, `backend/app/`, `backend/app/models/`, `backend/app/schemas/`, `backend/app/routers/`, `backend/app/services/`, `backend/app/utils/`, `backend/alembic/`, `backend/tests/`, `frontend/`
+- [x] T002 Initialize Python backend with FastAPI dependencies in `backend/requirements.txt` — include fastapi, uvicorn[standard], sqlalchemy[asyncio], asyncpg, alembic, passlib[bcrypt], python-jose[cryptography], cryptography, httpx, python-dotenv, pydantic-settings
+- [x] T003 [P] Create backend environment config template in `backend/.env.example` with DATABASE_URL, SECRET_KEY, ENCRYPTION_KEY, AI_BASE_URL, AI_MODEL, AI_API_KEY
+- [x] T004 [P] Scaffold React frontend using Vite in `frontend/` — run `npm create vite@latest frontend -- --template react`, install dependencies, install tailwindcss and @tailwindcss/vite
+- [x] T005 [P] Configure Vite proxy and Tailwind CSS v4 in `frontend/vite.config.js` — proxy `/api` to `http://localhost:8000`, add react() and tailwindcss() plugins
+- [x] T006 [P] Set up Tailwind CSS dark theme in `frontend/src/index.css` and `frontend/index.html` — use `@import "tailwindcss"`, `@custom-variant dark`, add `class="dark"` to html element
 
 ---
 
@@ -39,20 +39,20 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 Create async SQLAlchemy database engine and session factory in `backend/app/database.py` — async engine with asyncpg, async session maker, Base declarative class, get_db dependency
-- [ ] T008 Create application settings and config in `backend/app/config.py` — Pydantic BaseSettings loading from .env: DATABASE_URL, SECRET_KEY, ENCRYPTION_KEY, default AI config
-- [ ] T009 Create FastAPI application entry point in `backend/app/main.py` — app factory, CORS middleware, include all routers under `/api` prefix, lifespan handler for DB init
-- [ ] T010 Create `backend/app/__init__.py` and all sub-package `__init__.py` files (models, schemas, routers, services, utils)
-- [ ] T011 Implement JWT and password security utilities in `backend/app/utils/security.py` — create_access_token, create_refresh_token, verify_password, hash_password, verify_token functions using passlib[bcrypt] and python-jose
-- [ ] T012 Implement Fernet encryption utility for API keys in `backend/app/utils/security.py` — encrypt_api_key, decrypt_api_key functions using cryptography.fernet
-- [ ] T013 Implement authentication dependency injection in `backend/app/utils/deps.py` — get_current_user dependency that extracts and validates JWT from Authorization header, returns User
-- [ ] T014 Configure Alembic for async SQLAlchemy in `backend/alembic.ini` and `backend/alembic/env.py` — set sqlalchemy.url, configure async engine for migrations
-- [ ] T015 Create User SQLAlchemy model in `backend/app/models/user.py` — id, email (unique), password_hash, created_at, updated_at; relationships to sessions and api_config
-- [ ] T016 Create initial Alembic migration for User table — run `alembic revision --autogenerate -m "create user table"` in `backend/`
-- [ ] T017 [P] Set up React Router and auth context in `frontend/src/App.jsx` — BrowserRouter, routes for /login, /register, /chat; AuthContext provider
-- [ ] T018 [P] Create AuthContext with token management in `frontend/src/context/AuthContext.jsx` — store/clear tokens in localStorage, provide login/logout/register functions, auto-redirect on auth state change
-- [ ] T019 [P] Create ProtectedRoute component in `frontend/src/components/ProtectedRoute.jsx` — redirect to /login if not authenticated
-- [ ] T020 [P] Create API client base with auth interceptor in `frontend/src/api/client.js` — fetch wrapper that adds Authorization header, handles 401 refresh, base URL configuration
+- [x] T007 Create async SQLAlchemy database engine and session factory in `backend/app/database.py` — async engine with asyncpg, async session maker, Base declarative class, get_db dependency
+- [x] T008 Create application settings and config in `backend/app/config.py` — Pydantic BaseSettings loading from .env: DATABASE_URL, SECRET_KEY, ENCRYPTION_KEY, default AI config
+- [x] T009 Create FastAPI application entry point in `backend/app/main.py` — app factory, CORS middleware, include all routers under `/api` prefix, lifespan handler for DB init
+- [x] T010 Create `backend/app/__init__.py` and all sub-package `__init__.py` files (models, schemas, routers, services, utils)
+- [x] T011 Implement JWT and password security utilities in `backend/app/utils/security.py` — create_access_token, create_refresh_token, verify_password, hash_password, verify_token functions using passlib[bcrypt] and python-jose
+- [x] T012 Implement Fernet encryption utility for API keys in `backend/app/utils/security.py` — encrypt_api_key, decrypt_api_key functions using cryptography.fernet
+- [x] T013 Implement authentication dependency injection in `backend/app/utils/deps.py` — get_current_user dependency that extracts and validates JWT from Authorization header, returns User
+- [x] T014 Configure Alembic for async SQLAlchemy in `backend/alembic.ini` and `backend/alembic/env.py` — set sqlalchemy.url, configure async engine for migrations
+- [x] T015 Create User SQLAlchemy model in `backend/app/models/user.py` — id, email (unique), password_hash, created_at, updated_at; relationships to sessions and api_config
+- [x] T016 Create initial Alembic migration for User table — run `alembic revision --autogenerate -m "create user table"` in `backend/`
+- [x] T017 [P] Set up React Router and auth context in `frontend/src/App.jsx` — BrowserRouter, routes for /login, /register, /chat; AuthContext provider
+- [x] T018 [P] Create AuthContext with token management in `frontend/src/context/AuthContext.jsx` — store/clear tokens in localStorage, provide login/logout/register functions, auto-redirect on auth state change
+- [x] T019 [P] Create ProtectedRoute component in `frontend/src/components/ProtectedRoute.jsx` — redirect to /login if not authenticated
+- [x] T020 [P] Create API client base with auth interceptor in `frontend/src/api/client.js` — fetch wrapper that adds Authorization header, handles 401 refresh, base URL configuration
 
 **Checkpoint**: Foundation ready — database, auth, and API structure in place. User story implementation can now begin.
 
@@ -66,13 +66,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T021 [US1] Create auth Pydantic schemas in `backend/app/schemas/auth.py` — RegisterRequest (email, password), LoginRequest (email, password), TokenResponse (access_token, refresh_token, token_type, id, email), RefreshRequest (refresh_token)
-- [ ] T022 [US1] Implement auth service in `backend/app/services/auth_service.py` — register_user (validate email, hash password, create user, return tokens), login_user (verify credentials, return tokens), refresh_token (validate refresh, issue new access)
-- [ ] T023 [US1] Create auth router with endpoints in `backend/app/routers/auth.py` — POST /api/auth/register (201), POST /api/auth/login (200), POST /api/auth/refresh (200); all public (no auth required)
-- [ ] T024 [P] [US1] Create LoginPage component in `frontend/src/pages/LoginPage.jsx` — email/password form, submit calls auth API, success redirects to /chat, error displays message, link to register
-- [ ] T025 [P] [US1] Create RegisterPage component in `frontend/src/pages/RegisterPage.jsx` — email/password/confirm-password form, submit calls register API, success redirects to /chat, error displays message, link to login
-- [ ] T026 [US1] Create auth API client functions in `frontend/src/api/auth.js` — login(email, password), register(email, password), refreshToken(refresh_token)
-- [ ] T027 [US1] Wire auth pages to AuthContext — integrate LoginPage and RegisterPage with useAuth() hook, handle loading states and error display
+- [x] T021 [US1] Create auth Pydantic schemas in `backend/app/schemas/auth.py` — RegisterRequest (email, password), LoginRequest (email, password), TokenResponse (access_token, refresh_token, token_type, id, email), RefreshRequest (refresh_token)
+- [x] T022 [US1] Implement auth service in `backend/app/services/auth_service.py` — register_user (validate email, hash password, create user, return tokens), login_user (verify credentials, return tokens), refresh_token (validate refresh, issue new access)
+- [x] T023 [US1] Create auth router with endpoints in `backend/app/routers/auth.py` — POST /api/auth/register (201), POST /api/auth/login (200), POST /api/auth/refresh (200); all public (no auth required)
+- [x] T024 [P] [US1] Create LoginPage component in `frontend/src/pages/LoginPage.jsx` — email/password form, submit calls auth API, success redirects to /chat, error displays message, link to register
+- [x] T025 [P] [US1] Create RegisterPage component in `frontend/src/pages/RegisterPage.jsx` — email/password/confirm-password form, submit calls register API, success redirects to /chat, error displays message, link to login
+- [x] T026 [US1] Create auth API client functions in `frontend/src/api/auth.js` — login(email, password), register(email, password), refreshToken(refresh_token)
+- [x] T027 [US1] Wire auth pages to AuthContext — integrate LoginPage and RegisterPage with useAuth() hook, handle loading states and error display
 
 **Checkpoint**: Users can register, log in, and see an authenticated chat page shell. Story 1 independently testable.
 
@@ -86,16 +86,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Create Session SQLAlchemy model in `backend/app/models/session.py` — id, user_id (FK → User), name, created_at, updated_at; relationship to messages; cascade delete
-- [ ] T029 [US2] Create Message SQLAlchemy model in `backend/app/models/message.py` — id, session_id (FK → Session), role (CHECK user/assistant/system), content, created_at; cascade delete
-- [ ] T030 [US2] Generate Alembic migration for Session and Message tables — run `alembic revision --autogenerate -m "create session and message tables"` in `backend/`
-- [ ] T031 [US2] Create session Pydantic schemas in `backend/app/schemas/session.py` — SessionCreate (name optional), SessionUpdate (name), SessionResponse (id, name, created_at, updated_at, message_count)
-- [ ] T032 [US2] Implement session service in `backend/app/services/session_service.py` — create_session, list_user_sessions (ordered by updated_at DESC), get_session (with ownership check), rename_session, delete_session
-- [ ] T033 [US2] Create sessions router with endpoints in `backend/app/routers/sessions.py` — GET /api/sessions, POST /api/sessions (201), PATCH /api/sessions/:id, DELETE /api/sessions/:id (204); all require auth
-- [ ] T034 [P] [US2] Create sessions API client functions in `frontend/src/api/sessions.js` — listSessions(), createSession(name?), renameSession(id, name), deleteSession(id)
-- [ ] T035 [US2] Create SessionList sidebar component in `frontend/src/components/SessionList.jsx` — list sessions, "New Chat" button, click to select, double-click or edit icon to rename, delete button with confirmation
-- [ ] T036 [US2] Create ChatPage layout with sidebar in `frontend/src/pages/ChatPage.jsx` — left sidebar (SessionList), main content area (empty for now, messages in US3), session state management (active session ID)
-- [ ] T037 [US2] Implement useChat hook for session state in `frontend/src/hooks/useChat.js` — manage active session, session list fetch/refresh, create/rename/delete operations
+- [x] T028 [US2] Create Session SQLAlchemy model in `backend/app/models/session.py` — id, user_id (FK → User), name, created_at, updated_at; relationship to messages; cascade delete
+- [x] T029 [US2] Create Message SQLAlchemy model in `backend/app/models/message.py` — id, session_id (FK → Session), role (CHECK user/assistant/system), content, created_at; cascade delete
+- [x] T030 [US2] Generate Alembic migration for Session and Message tables — run `alembic revision --autogenerate -m "create session and message tables"` in `backend/`
+- [x] T031 [US2] Create session Pydantic schemas in `backend/app/schemas/session.py` — SessionCreate (name optional), SessionUpdate (name), SessionResponse (id, name, created_at, updated_at, message_count)
+- [x] T032 [US2] Implement session service in `backend/app/services/session_service.py` — create_session, list_user_sessions (ordered by updated_at DESC), get_session (with ownership check), rename_session, delete_session
+- [x] T033 [US2] Create sessions router with endpoints in `backend/app/routers/sessions.py` — GET /api/sessions, POST /api/sessions (201), PATCH /api/sessions/:id, DELETE /api/sessions/:id (204); all require auth
+- [x] T034 [P] [US2] Create sessions API client functions in `frontend/src/api/sessions.js` — listSessions(), createSession(name?), renameSession(id, name), deleteSession(id)
+- [x] T035 [US2] Create SessionList sidebar component in `frontend/src/components/SessionList.jsx` — list sessions, "New Chat" button, click to select, double-click or edit icon to rename, delete button with confirmation
+- [x] T036 [US2] Create ChatPage layout with sidebar in `frontend/src/pages/ChatPage.jsx` — left sidebar (SessionList), main content area (empty for now, messages in US3), session state management (active session ID)
+- [x] T037 [US2] Implement useChat hook for session state in `frontend/src/hooks/useChat.js` — manage active session, session list fetch/refresh, create/rename/delete operations
 
 **Checkpoint**: Full session CRUD working with sidebar. Switching sessions shows correct (empty) views. Data persists across refresh. Story 2 independently testable.
 
@@ -109,16 +109,16 @@
 
 ### Implementation for User Story 3
 
-- [ ] T038 [US3] Create message Pydantic schemas in `backend/app/schemas/message.py` — ChatRequest (message), MessageResponse (id, role, content, created_at), SSE event schemas
-- [ ] T039 [US3] Implement LLM service in `backend/app/services/llm_service.py` — stream_chat_completion(base_url, api_key, model, messages[]) using httpx async streaming; parse SSE data lines; yield delta content tokens; handle errors (invalid key, rate limit, network)
-- [ ] T040 [US3] Implement chat service in `backend/app/services/chat_service.py` — send_message(session_id, user_id, content): save user message, load session history, call LLM service with full history, stream response tokens, save complete assistant message, update session.updated_at
-- [ ] T041 [US3] Create chat router with SSE streaming endpoint in `backend/app/routers/chat.py` — POST /api/chat/:session_id returning StreamingResponse (text/event-stream); require auth; validate session ownership; return 422 if no API key configured
-- [ ] T042 [US3] Create message API client functions in `frontend/src/api/chat.js` — sendMessage(sessionId, message) using fetch with ReadableStream to consume SSE; getMessages(sessionId, limit?, before?)
-- [ ] T043 [US3] Create messages API client in `frontend/src/api/sessions.js` — add getSessionMessages(sessionId) function
-- [ ] T044 [US3] Create ChatMessage component in `frontend/src/components/ChatMessage.jsx` — render user vs assistant messages with different styling, support markdown rendering via react-markdown, code blocks with syntax highlighting
-- [ ] T045 [US3] Create ChatInput component in `frontend/src/components/ChatInput.jsx` — text input with send button, Enter to send (Shift+Enter for newline), disable during streaming, auto-focus
-- [ ] T046 [US3] Integrate chat UI into ChatPage in `frontend/src/pages/ChatPage.jsx` — message list (auto-scroll to bottom), streaming token display, ChatInput at bottom, loading indicator during LLM processing, error display for API failures
-- [ ] T047 [US3] Install react-markdown and react-syntax-highlighter in `frontend/` — `npm install react-markdown react-syntax-highlighter`
+- [x] T038 [US3] Create message Pydantic schemas in `backend/app/schemas/message.py` — ChatRequest (message), MessageResponse (id, role, content, created_at), SSE event schemas
+- [x] T039 [US3] Implement LLM service in `backend/app/services/llm_service.py` — stream_chat_completion(base_url, api_key, model, messages[]) using httpx async streaming; parse SSE data lines; yield delta content tokens; handle errors (invalid key, rate limit, network)
+- [x] T040 [US3] Implement chat service in `backend/app/services/chat_service.py` — send_message(session_id, user_id, content): save user message, load session history, call LLM service with full history, stream response tokens, save complete assistant message, update session.updated_at
+- [x] T041 [US3] Create chat router with SSE streaming endpoint in `backend/app/routers/chat.py` — POST /api/chat/:session_id returning StreamingResponse (text/event-stream); require auth; validate session ownership; return 422 if no API key configured
+- [x] T042 [US3] Create message API client functions in `frontend/src/api/chat.js` — sendMessage(sessionId, message) using fetch with ReadableStream to consume SSE; getMessages(sessionId, limit?, before?)
+- [x] T043 [US3] Create messages API client in `frontend/src/api/sessions.js` — add getSessionMessages(sessionId) function
+- [x] T044 [US3] Create ChatMessage component in `frontend/src/components/ChatMessage.jsx` — render user vs assistant messages with different styling, support markdown rendering via react-markdown, code blocks with syntax highlighting
+- [x] T045 [US3] Create ChatInput component in `frontend/src/components/ChatInput.jsx` — text input with send button, Enter to send (Shift+Enter for newline), disable during streaming, auto-focus
+- [x] T046 [US3] Integrate chat UI into ChatPage in `frontend/src/pages/ChatPage.jsx` — message list (auto-scroll to bottom), streaming token display, ChatInput at bottom, loading indicator during LLM processing, error display for API failures
+- [x] T047 [US3] Install react-markdown and react-syntax-highlighter in `frontend/` — `npm install react-markdown react-syntax-highlighter`
 
 **Checkpoint**: Full chat loop working — send message, see streaming response, history persists, context maintained across turns. Story 3 independently testable.
 
@@ -132,15 +132,15 @@
 
 ### Implementation for User Story 4
 
-- [ ] T048 [US4] Create ApiConfig SQLAlchemy model in `backend/app/models/api_config.py` — id, user_id (FK → User, UNIQUE), api_key_encrypted, base_url, model_name, created_at, updated_at; cascade delete
-- [ ] T049 [US4] Generate Alembic migration for ApiConfig table — run `alembic revision --autogenerate -m "create api_config table"` in `backend/`
-- [ ] T050 [US4] Create settings Pydantic schemas in `backend/app/schemas/settings.py` — SettingsUpdate (api_key, base_url, model_name), SettingsResponse (has_api_key, base_url, model_name, updated_at)
-- [ ] T051 [US4] Implement settings service in `backend/app/services/settings_service.py` — get_user_settings, update_user_settings (encrypt API key before saving), get_decrypted_api_key (for LLM calls)
-- [ ] T052 [US4] Create settings router with endpoints in `backend/app/routers/settings.py` — GET /api/settings, PUT /api/settings; require auth; never return plaintext API key
-- [ ] T053 [US4] Update chat service to use per-user API config in `backend/app/services/chat_service.py` — load user's ApiConfig, decrypt API key, pass to LLM service; return 422 if no config exists
-- [ ] T054 [P] [US4] Create settings API client functions in `frontend/src/api/settings.js` — getSettings(), updateSettings(api_key, base_url, model_name)
-- [ ] T055 [US4] Create SettingsModal component in `frontend/src/components/SettingsModal.jsx` — form with API key (password field), base URL, model name inputs; save/cancel buttons; show "configured" status; accessible from ChatPage header
-- [ ] T056 [US4] Integrate SettingsModal into ChatPage in `frontend/src/pages/ChatPage.jsx` — settings gear icon in header, open modal, handle save, show prompt to configure if no API key when trying to chat
+- [x] T048 [US4] Create ApiConfig SQLAlchemy model in `backend/app/models/api_config.py` — id, user_id (FK → User, UNIQUE), api_key_encrypted, base_url, model_name, created_at, updated_at; cascade delete
+- [x] T049 [US4] Generate Alembic migration for ApiConfig table — run `alembic revision --autogenerate -m "create api_config table"` in `backend/`
+- [x] T050 [US4] Create settings Pydantic schemas in `backend/app/schemas/settings.py` — SettingsUpdate (api_key, base_url, model_name), SettingsResponse (has_api_key, base_url, model_name, updated_at)
+- [x] T051 [US4] Implement settings service in `backend/app/services/settings_service.py` — get_user_settings, update_user_settings (encrypt API key before saving), get_decrypted_api_key (for LLM calls)
+- [x] T052 [US4] Create settings router with endpoints in `backend/app/routers/settings.py` — GET /api/settings, PUT /api/settings; require auth; never return plaintext API key
+- [x] T053 [US4] Update chat service to use per-user API config in `backend/app/services/chat_service.py` — load user's ApiConfig, decrypt API key, pass to LLM service; return 422 if no config exists
+- [x] T054 [P] [US4] Create settings API client functions in `frontend/src/api/settings.js` — getSettings(), updateSettings(api_key, base_url, model_name)
+- [x] T055 [US4] Create SettingsModal component in `frontend/src/components/SettingsModal.jsx` — form with API key (password field), base URL, model name inputs; save/cancel buttons; show "configured" status; accessible from ChatPage header
+- [x] T056 [US4] Integrate SettingsModal into ChatPage in `frontend/src/pages/ChatPage.jsx` — settings gear icon in header, open modal, handle save, show prompt to configure if no API key when trying to chat
 
 **Checkpoint**: Users can configure and switch API keys. Sessions and messages are fully preserved across key changes. Story 4 independently testable.
 
@@ -150,13 +150,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T057 [P] Style the entire frontend with polished dark theme in `frontend/src/index.css` — consistent spacing, hover effects, transitions, focus states, responsive layout, matching ChatGPT/Claude aesthetic
-- [ ] T058 [P] Add loading skeletons and empty states across all pages — session list empty state, chat empty state, loading spinners during API calls
-- [ ] T059 Add proper error handling and user-friendly error messages across all frontend components — network errors, 401 redirects, validation errors, LLM API errors (invalid key, rate limit)
-- [ ] T060 [P] Add README.md with setup instructions in project root — reference quickstart.md, document both backend and frontend setup
-- [ ] T061 Handle long conversation context windows in `backend/app/services/chat_service.py` — truncate older messages when total tokens approach model context limit, always preserve system message and recent messages
-- [ ] T062 Add virtual scrolling or pagination for long message lists in `frontend/src/pages/ChatPage.jsx` — lazy-load older messages, maintain scroll position
-- [ ] T063 Security hardening — validate all inputs, rate limit auth endpoints, secure CORS configuration, ensure API keys never logged or returned in responses
+- [x] T057 [P] Style the entire frontend with polished dark theme in `frontend/src/index.css` — consistent spacing, hover effects, transitions, focus states, responsive layout, matching ChatGPT/Claude aesthetic
+- [x] T058 [P] Add loading skeletons and empty states across all pages — session list empty state, chat empty state, loading spinners during API calls
+- [x] T059 Add proper error handling and user-friendly error messages across all frontend components — network errors, 401 redirects, validation errors, LLM API errors (invalid key, rate limit)
+- [x] T060 [P] Add README.md with setup instructions in project root — reference quickstart.md, document both backend and frontend setup
+- [x] T061 Handle long conversation context windows in `backend/app/services/chat_service.py` — truncate older messages when total tokens approach model context limit, always preserve system message and recent messages
+- [x] T062 Add virtual scrolling or pagination for long message lists in `frontend/src/pages/ChatPage.jsx` — lazy-load older messages, maintain scroll position
+- [x] T063 Security hardening — validate all inputs, rate limit auth endpoints, secure CORS configuration, ensure API keys never logged or returned in responses
 
 ---
 
